@@ -1,0 +1,14 @@
+name: Workflow
+on: 
+    push:
+        branches: 
+            - ANALISIS-LAB
+jobs: 
+    SAST:
+        runs-on: ubuntu-latest
+        steps: 
+            - name: Hola mundo
+              run: |
+                echo "pruab de análisis"
+
+
