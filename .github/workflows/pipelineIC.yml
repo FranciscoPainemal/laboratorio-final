@@ -22,12 +22,12 @@ jobs:
                 chmod 777 gradlew
                 ./gradlew build  
                 
-            # - name: Validando proyecto con Sonar
-            #   run: |
-            #     curl -f -X POST -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/projects/create' -d 'name=${{ github.event.repository.name }}' -d 'project=${{ github.event.repository.name }}' -d 'organization=franciscopainemal' -d 'visibility=public'
-            #     if[ $? -ne 0]; then
-            #         echo "el proyecto ya existe en SonarCloud"
-            #     else
-            #         echo "Proyecto creado exitosamente con SonarCloud"
-            #         curl -f -X POST -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/project_branches/rename' -d 'name=${{ github.event.repository.name }}' -d 'project=${{ github.event.repository.name }}' -d 'organization=franciscopainemal' -d 'visibility=public'                
-            #     fi
+            - name: Validando proyecto con Sonar
+              run: |
+                curl -f -X POST -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/projects/create' -d 'name=${{ github.event.repository.name }}' -d 'project=${{ github.event.repository.name }}' -d 'organization=franciscopainemal' -d 'visibility=public'
+                if[ $? -ne 0]; then
+                    echo "el proyecto ya existe en SonarCloud"
+                else
+                    echo "Proyecto creado exitosamente con SonarCloud"
+                    curl -f -X POST -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/project_branches/rename' -d 'name=${{ github.event.repository.name }}' -d 'project=${{ github.event.repository.name }}' -d 'organization=franciscopainemal' -d 'visibility=public'                
+                fi
