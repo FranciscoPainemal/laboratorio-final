@@ -71,9 +71,9 @@ jobs:
               run: |
 
                 # curl -s -X GET -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/ce/component?component=${{ github.event.repository.name }}'
-                id_analisis_sonar = curl -s -X GET -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/ce/component?component=${{ github.event.repository.name }}'
-                id_analisisParse = $(echo "$id_analisis_sonar" | jq .current.analysisId | sed -e 's/^"//' -e 's/"$//')
-                echo "Ide del análisis sonarwqube: $id_analisisParse"
+                idanalisissonar = curl -s -X GET -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/ce/component?component=${{ github.event.repository.name }}'
+                idanalisisParse = $(echo "$idanalisissonar" | jq .current.analysisId | sed -e 's/^"//' -e 's/"$//')
+                echo "Id del análisis sonarwqube $idanalisisParse"
 
 
  
