@@ -43,13 +43,19 @@ jobs:
                 set -e
             -  name: Validando el tipo de proyecto
                run: | 
+                if [ -f "package.json" ]; 
+                then    
                     if grep -q '"react"' package.json 
                     then
                         echo "Proyecto es React"
                     else   
-                        echo "El proyecto on es del tipp React"
+                        echo "El proyecto no es del tipp React"
                         exit 1
                     fi
+                else 
+                    echo "No se encontró archivo"
+                    exit 1
+                fi
 
 
 
