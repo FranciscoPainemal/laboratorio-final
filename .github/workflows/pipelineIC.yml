@@ -41,9 +41,15 @@ jobs:
                     curl -f -X POST -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/project_branches/rename' -d 'name=main' -d 'project=${{ github.event.repository.name }}'                
                 fi
                 set -e
-            # -  name: Validando el tipo de proyecto
-            #    run: |
-            #     if [ -f build.react ]
+            -  name: Validando el tipo de proyecto
+               run: | 
+                    if grep -q '"react"' package.json 
+                    then
+                        echo "Proyecto es React"
+                    else   
+                        echo "El proyecto on es del tipp React"
+                        exit 1
+                    fi
 
 
 
