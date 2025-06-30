@@ -21,7 +21,7 @@ jobs:
             - name: Build React
               run: npm run build
                 
-            - name: Validando proyecto con Sonar
+            - name: Validando ecistencia del proyecto en SonarQube
               run: |
                 set +e
                 curl -f -X POST -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/projects/create' -d 'name=${{github.event.repository.name}}' -d 'project=${{github.event.repository.name}}' -d 'organization=franciscopainemal' -d 'visibility=public'
@@ -65,7 +65,7 @@ jobs:
                 projectBaseDir: .
               env:
                 SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-                SONAR_PROJECT_KEY: franciscopainemal_laboratorio-final-
+                SONAR_PROJECT_KEY: franciscopainemal_${{ github.event.repository.name }}
                 SONAR_ORGANIZATION: franciscopainemal
 
 
