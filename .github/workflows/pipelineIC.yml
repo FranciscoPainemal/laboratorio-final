@@ -58,12 +58,12 @@ jobs:
                 fi
             - name: Ejecutando SonarCloud
               run: |
-                ./reac sonarqube\
+                ./react sonarqube\
                   -Dsonar.projectKey=${{ github.event.repository.name }} \
                   -Dsonar.organization=franciscopainemal \
                   -Dsonar.host.url=https://sonarcloud.io \
                   -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
-                  -Dsonar.branch.name=main \
+                  -Dsonar.branch.name=main
 
 
 
