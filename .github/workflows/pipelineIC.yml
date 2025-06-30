@@ -22,40 +22,40 @@ jobs:
               with:
                 node-version: 18
 
-            # - name: Instalando dependencias
-            #   run: npm ci
+            - name: Instalando dependencias
+              run: npm ci
 
-            # - name: Build React
-            #   run: npm run build
+            - name: Build React
+              run: npm run build
                 
-            # - name: Validando proyecto con Sonar
-            #   run: |
-            #     set +e
-            #     curl -f -X POST -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/projects/create' -d 'name=${{github.event.repository.name}}' -d 'project=${{github.event.repository.name}}' -d 'organization=franciscopainemal' -d 'visibility=public'
-            #     if [ $? -ne 0 ]; then
-            #         echo "el proyecto ya existe en SonarCloud"
-            #         echo ":: set-output name=proyectoExiste::1"
-            #     else
-            #         echo "Proyecto ${{github.event.repository.name}} creado exitosamente con SonarCloud"
-            #         echo "Se establece rama Main como rama por defecto"
-            #         curl -f -X POST -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/project_branches/rename' -d 'name=main' -d 'project=${{ github.event.repository.name }}'                
-            #     fi
-            #     set -e
-            # -  name: Validando el tipo de proyecto
-            #    run: | 
-            #     if [ -f "package.json" ]; 
-            #     then    
-            #         if grep -q '"react"' package.json 
-            #         then
-            #             echo "Proyecto es React."
-            #         else   
-            #             echo "El proyecto no es del tipp React."
-            #             exit 1
-            #         fi
-            #     else 
-            #         echo "No se encontró archivo."
-            #         exit 1
-            #     fi
+            - name: Validando proyecto con Sonar
+              run: |
+                set +e
+                curl -f -X POST -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/projects/create' -d 'name=${{github.event.repository.name}}' -d 'project=${{github.event.repository.name}}' -d 'organization=franciscopainemal' -d 'visibility=public'
+                if [ $? -ne 0 ]; then
+                    echo "el proyecto ya existe en SonarCloud"
+                    echo ":: set-output name=proyectoExiste::1"
+                else
+                    echo "Proyecto ${{github.event.repository.name}} creado exitosamente con SonarCloud"
+                    echo "Se establece rama Main como rama por defecto"
+                    curl -f -X POST -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/project_branches/rename' -d 'name=main' -d 'project=${{ github.event.repository.name }}'                
+                fi
+                set -e
+            -  name: Validando el tipo de proyecto
+               run: | 
+                if [ -f "package.json" ]; 
+                then    
+                    if grep -q '"react"' package.json 
+                    then
+                        echo "Proyecto es React."
+                    else   
+                        echo "El proyecto no es del tipp React."
+                        exit 1
+                    fi
+                else 
+                    echo "No se encontró archivo."
+                    exit 1
+                fi
             # - name: Ejecutando SonarCloud
             #   run: |
             #     npx sonar-scanner \
