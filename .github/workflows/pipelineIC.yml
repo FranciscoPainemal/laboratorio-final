@@ -22,10 +22,10 @@ jobs:
               with:
                 node-version: 18
 
-            - name: Install dependencies
+            - name: Instalando dependencias
               run: npm ci
 
-            - name: Run React build
+            - name: Build React
               run: npm run build
                 
             - name: Validando proyecto con Sonar
