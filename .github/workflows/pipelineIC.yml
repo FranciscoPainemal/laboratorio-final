@@ -58,7 +58,7 @@ jobs:
                 fi
             - name: Ejecutando SonarCloud
               run: |
-                ./react sonarqube\
+                npx sonar-scanner \
                   -Dsonar.projectKey=${{ github.event.repository.name }} \
                   -Dsonar.organization=franciscopainemal \
                   -Dsonar.host.url=https://sonarcloud.io \
