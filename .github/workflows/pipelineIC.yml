@@ -70,10 +70,10 @@ jobs:
             - name: Validando resultados de SonarQube
               run: |
 
-                # curl -s -X GET -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/ce/component?component=${{ github.event.repository.name }}'
-                idanalisissonar=curl -s -X GET -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/ce/component?component=${{ github.event.repository.name }}'
-                idanalisisParse=$(echo "$idanalisissonar" | jq .current.analysisId | sed -e 's/^"//' -e 's/"$//')
+                # curl -s -X GET -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/ce/component?component=${{ github.event.repository.name }}')
+                idanalisis=$(curl -s -X GET -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/ce/component?component=${{ github.event.repository.name }}')
+                idanalisisParse=$(echo "$idanalisis" | jq .current.analysisId | sed -e 's/^"//' -e 's/"$//')
                 echo "Id del análisis sonarwqube $idanalisisParse"
-                qualitygate=curl -s -X GET -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/ce/component?component=${{ github.event.repository.name }}'
+                qualitygate=$(curl -s -X GET -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/qualitygates/project_status?analysisId=$idanalisisParse')
 
  
