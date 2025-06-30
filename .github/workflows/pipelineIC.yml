@@ -67,6 +67,9 @@ jobs:
             #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
             #     SONAR_PROJECT_KEY: franciscopainemal_${{ github.event.repository.name }}
             #     SONAR_ORGANIZATION: franciscopainemal
+            - name: Validando resultados de SonarQube
+              run: |
+                curl -s -X GET -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/ce/component?component=${{ github.event.repository.name }}'
 
 
-
+ 
