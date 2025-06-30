@@ -69,7 +69,11 @@ jobs:
             #     SONAR_ORGANIZATION: franciscopainemal
             - name: Validando resultados de SonarQube
               run: |
-                curl -s -X GET -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/ce/component?component=${{ github.event.repository.name }}'
+
+                # curl -s -X GET -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/ce/component?component=${{ github.event.repository.name }}'
+                id_analisis_sonar = curl -s -X GET -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/ce/component?component=${{ github.event.repository.name }}'
+                id_analisisParse = $(echo "$id_analisis_sonar" | jq .current.analysisId | sed -e 's/^"//' -e 's/"$//')
+                echo "Ide del análisis sonarwqube: $id_analisisParse"
 
 
  
