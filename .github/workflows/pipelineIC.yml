@@ -97,7 +97,7 @@ jobs:
                 issuesvalidate=$(curl -s -X GET -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/issues/search?branch=main&componentKeys=${{ github.event.repository.name }}&facets=severities' | jq '.facets[0].values[2].count')
                 if [ "$issuesvalidate" -gt 0 ];
                 then
-                  echo "Existen dificultades en el código, abortar Pipeline"
+                  echo "Existen dificultades en el código, abortar Pipeline $issuesvalidate"
                   exit 1
                 else
                   echo "Continua Pipeline, código correcto valor issue $issuesvalidate"
