@@ -21,7 +21,7 @@ jobs:
             - name: Build React
               run: npm run build
                 
-            - name: Validando ecistencia del proyecto en SonarQube
+            - name: Validando existencia del proyecto en SonarQube
               run: |
                 set +e
                 curl -f -X POST -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/projects/create' -d 'name=${{github.event.repository.name}}' -d 'project=${{github.event.repository.name}}' -d 'organization=franciscopainemal' -d 'visibility=public'
@@ -75,6 +75,23 @@ jobs:
                 idanalisisParse=$(echo "$idanalisis" | jq .current.analysisId | sed -e 's/^"//' -e 's/"$//')
                 echo "Id del análisis sonarwqube $idanalisisParse"
                 qualitygate=$(curl -s -X GET -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/qualitygates/project_status?analysisId=$idanalisisParse')
-                qualitygatesStatus=$(echo "$qualitygate"  | jq .projectStatus.status | sed -e 's/^"//' -e 's/"$//')
+                qualitygatesStatus=$(echo "$qualitygate" | jq .projectStatus.status | sed -e 's/^"//' -e 's/"$//')
+                case $qualitygateStatus in
+                  "OK")
+                  echo "Calidad del código OK"
+                  ;;
+                  "ERROR")
+                  echo "Calidad del código ERROR"
+                  exit 1
+                  ;;
+                  "WARN")
+                  echo "Calidad del código WARNING"
+                  exit 1
+                  ;;
+                  *)
+                  echo "Estado desconocido de la calidad del codigo $qualitygateStatus"
+                  exit 1
+                  ;;
+                esac  
 
  
