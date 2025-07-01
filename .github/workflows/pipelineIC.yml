@@ -78,20 +78,20 @@ jobs:
                 qualitygatesStatus=$(echo "$qualitygate" | jq .projectStatus.status | sed -e 's/^"//' -e 's/"$//')
                 case $qualitygateStatus in
                   *"OK"*)
-                  echo "Calidad del código OK"
+                    echo "Calidad del código OK"
                   ;;
                   *"ERROR"*)
-                  echo "Calidad del código ERROR"
-                  exit 1
-                  ;;
+                    echo "Calidad del código ERROR"
+                    exit 1
+                    ;;
                   *"WARN"*)
-                  echo "Calidad del código WARN"
-                  exit 1
-                  ;;
-                  *)
-                  echo "Estado desconocido de la calidad del codigo $qualitygateStatus"
-                  exit 1
-                  ;;
+                    echo "Calidad del código WARN"
+                    exit 1
+                    ;;
+                  *"NONE"*)
+                    echo "Estado NONE de la calidad del codigo $qualitygateStatus"
+                    exit 1
+                    ;;
                 esac  
 
  
