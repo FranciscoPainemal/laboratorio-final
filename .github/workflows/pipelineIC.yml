@@ -100,7 +100,7 @@ jobs:
                   echo "Existen dificultades en el código, abortar Pipeline"
                   exit 1
                 else
-                  echo "Continua Pipeline, código correcto"
+                  echo "Continua Pipeline, código correcto valor issue $issuesvalidate"
                 fi
 
                 
