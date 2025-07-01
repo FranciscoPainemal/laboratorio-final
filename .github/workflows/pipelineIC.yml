@@ -77,15 +77,15 @@ jobs:
                 qualitygate=$(curl -s -X GET -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/qualitygates/project_status?analysisId=$idanalisisParse')
                 qualitygatesStatus=$(echo "$qualitygate" | jq .projectStatus.status | sed -e 's/^"//' -e 's/"$//')
                 case $qualitygateStatus in
-                  "OK")
+                  *"OK"*)
                   echo "Calidad del código OK"
                   ;;
-                  "ERROR")
+                  *"ERROR"*)
                   echo "Calidad del código ERROR"
                   exit 1
                   ;;
-                  "WARN")
-                  echo "Calidad del código WARNING"
+                  *"WARN"*)
+                  echo "Calidad del código WARN"
                   exit 1
                   ;;
                   *)
