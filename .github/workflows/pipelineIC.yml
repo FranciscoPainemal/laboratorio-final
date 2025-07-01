@@ -94,7 +94,7 @@ jobs:
                 #     ;;
                 # esac
                 
-                issuesvalidate=$(curl -s -X GET -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarclud.io/api/issues/search?branch=main&componentKeys=${{ github.event.repository.name }}'&facets=severities' | jq .facets[0].values[1].Count  )
+                issuesvalidate=$(curl -s -X GET -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarclud.io/api/issues/search?branch=main&componentKeys=${{ github.event.repository.name }}&facets=severities' | jq '.facets[0].values[1].Count')
                 if [ "$issuesvalidate" -gt 0 ];
                 then
                   echo "Existen dificultades en el código, abortar Pipeline"
