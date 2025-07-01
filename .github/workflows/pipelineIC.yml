@@ -75,5 +75,6 @@ jobs:
                 idanalisisParse=$(echo "$idanalisis" | jq .current.analysisId | sed -e 's/^"//' -e 's/"$//')
                 echo "Id del análisis sonarwqube $idanalisisParse"
                 qualitygate=$(curl -s -X GET -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/qualitygates/project_status?analysisId=$idanalisisParse')
+                qualitygatesStatus=$(echo "$qualitygate"  | jq .projectStatus.status | sed -e 's/^"//' -e 's/"$//')
 
  
