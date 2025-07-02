@@ -138,10 +138,10 @@ jobs:
       - name: Build Docker Image
         run: |
           docker build --tag wainerock/devsecopslab-test:latest .
-          
+
       - name: Push Docker Image
         run: |
-          docker push wainerock/devsecopslab-test:latest
+          docker push wainerock/devsecopslab-test
 
         
           
