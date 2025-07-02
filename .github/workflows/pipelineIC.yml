@@ -137,10 +137,10 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          cocker build --tag wainerock/laboratorio-final-test:latest .
+          cocker build --tag wainerock/devsecopslab-test:latest .
       - name: Push Docker Image
         run: |
-        docker push wainerock/laboratorio-final-test:latest
+          docker push wainerock/devsecopslab-test:latest
 
         
           
