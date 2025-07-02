@@ -110,14 +110,30 @@ jobs:
           name: dependency-check-reports
           path: ${{ github.workspace }}/reports
 
-      - name: Upload React Build 
+      # - name: Upload React Build 
+      #   uses: actions/upload-artifact@v4
+      #   with: 
+      #     name: react-build
+      #     path: ./build
+
+    UPLOADDOCKER:
+      needs: SCA
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - run: npm ci
+      - run: npm run build
+      - name: Upload React Build
         uses: actions/upload-artifact@v4
-        with: 
+        with:
           name: react-build
           path: ./build
 
     DOCKERBUILD:
-      needs: SCA
+      needs: UPLOADDOCKER
       runs-on: ubuntu-latest
       steps:
       - name: Checkout code
@@ -127,7 +143,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: react-build
-          path: ./build
+          path: ${{ github.workspace }}
 
       - name: Verificar contenido
         run: ls -la ./build
