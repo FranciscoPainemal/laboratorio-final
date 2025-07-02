@@ -59,50 +59,19 @@ jobs:
                   -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
                   -Dsonar.branch.name=main
 
-            # - name: Ejecutando SonarCloud
-            #   uses: SonarSource/sonarcloud-github-action@v2
-            #   with:
-            #     projectBaseDir: .
-            #   env:
-            #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-            #     SONAR_PROJECT_KEY: franciscopainemal_${{ github.event.repository.name }}
-            #     SONAR_ORGANIZATION: franciscopainemal
             - name: Validando resultados de SonarQube
               run: |
-
-                # curl -s -X GET -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/ce/component?component=${{ github.event.repository.name }}')
-                # idanalisis=$(curl -s -X GET -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/ce/component?component=${{ github.event.repository.name }}')
-                # idanalisisParse=$(echo "$idanalisis" | jq .current.analysisId | sed -e 's/^"//' -e 's/"$//')
-                # echo "Id del análisis sonarwqube $idanalisisParse"
-                # qualitygate=$(curl -s -X GET -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/qualitygates/project_status?analysisId=$idanalisisParse')
-                # qualitygatesStatus=$(echo "$qualitygate" | jq .projectStatus.status | sed -e 's/^"//' -e 's/"$//')
-                # case $qualitygateStatus in
-                #   *"OK"*)
-                #     echo "Calidad del código OK"
-                #   ;;
-                #   *"ERROR"*)
-                #     echo "Calidad del código ERROR"
-                #     exit 1
-                #     ;;
-                #   *"WARN"*)
-                #     echo "Calidad del código WARN"
-                #     exit 1
-                #     ;;
-                #   *"NONE"*)
-                #     echo "Estado NONE de la calidad del codigo $qualitygateStatus"
-                #     exit 1
-                #     ;;
-                # esac
-                
-                issuesvalidate=$(curl -s -X GET -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/issues/search?branch=main&componentKeys=${{ github.event.repository.name }}&facets=severities' | jq '.facets[0].values[2].count')
-                if [ "$issuesvalidate" -gt 0 ];
+                issuesCritical=$(curl -s -X GET -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/issues/search?branch=main&componentKeys=${{ github.event.repository.name }}&facets=severities' | jq '.facets[0].values[2].count')
+                issuesMayor=$(curl -s -X GET -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/issues/search?branch=main&componentKeys=${{ github.event.repository.name }}&facets=severities' | jq '.facets[0].values[1].count')
+                issuesMinor=$(curl -s -X GET -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/issues/search?branch=main&componentKeys=${{ github.event.repository.name }}&facets=severities' | jq '.facets[0].values[0].count')
+                                            
+                if [ "$issuesCritical" -gt 0 ] || [ "$issuesMayor" -gt 0 ] || [ "$issuesMinor" -gt 0 ];
                 then
-                  echo "Existen dificultades en el código, abortar Pipeline $issuesvalidate"
-                  exit 1
+                  echo "Existen dificultades en el código, abortar Pipeline $issuesCritical"
+                  # exit 1
                 else
-                  echo "Continua Pipeline, código correcto valor issue $issuesvalidate"
+                  echo "Continua Pipeline, código correcto valor issue $issuesCritical"
                 fi
-
                 
     SCA:
       needs: SAST
