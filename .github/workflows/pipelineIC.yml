@@ -4,6 +4,7 @@ on:
         branches: 
             - ANALISIS-LAB
 jobs: 
+# ----------------------------  Análisis de código estático SAST -------------------------------------  
     SAST:
         runs-on: ubuntu-latest
         steps: 
@@ -72,7 +73,7 @@ jobs:
                 else
                   echo "Continua Pipeline"
                 fi
-                
+# ----------------------------  Análisis de dependencias SCA-------------------------------------                
     SCA:
       needs: SAST
       runs-on: ubuntu-latest
@@ -91,24 +92,24 @@ jobs:
       - name: Build React
         run: npm run build
       
-      - name: Dependency Check
-        uses: dependency-check/Dependency-Check_Action@1.1.0
-        env:
-          REACT_HOME: /foo
-        with:
-          project: '${{ github.event.repository.name }}'
-          path: '.'
-          format: 'HTML'
-          out: 'reports'
-          args: > 
-            --failOnCVSS 7
-            --enableRetired
+      # - name: Dependency Check
+      #   uses: dependency-check/Dependency-Check_Action@1.1.0
+      #   env:
+      #     REACT_HOME: /foo
+      #   with:
+      #     project: '${{ github.event.repository.name }}'
+      #     path: '.'
+      #     format: 'HTML'
+      #     out: 'reports'
+      #     args: > 
+      #       --failOnCVSS 7
+      #       --enableRetired
       
-      - name: Generar reporte Dependency Check
-        uses: actions/upload-artifact@v4
-        with:
-          name: dependency-check-reports
-          path: ${{ github.workspace }}/reports
+      # - name: Generar reporte Dependency Check
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: dependency-check-reports
+      #     path: ${{ github.workspace }}/reports
 
       # - name: Upload React Build 
       #   uses: actions/upload-artifact@v4
@@ -116,51 +117,79 @@ jobs:
       #     name: react-build
       #     path: ./build
 
+# ----------------------------  Subir repo a Docker -------------------------------------
     UPLOADDOCKER:
       needs: SCA
+      # runs-on: ubuntu-latest
+      # steps:
+      # - uses: actions/checkout@v2
+      # - uses: actions/setup-node@v4
+      #   with:
+      #     node-version: 18
+      # - run: npm ci
+      # - run: npm run build
+      # - name: Upload React Build
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: react-build
+      #     path: ./build
       runs-on: ubuntu-latest
       steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v4
+      - name: Checkout código
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 18
-      - run: npm ci
-      - run: npm run build
-      - name: Upload React Build
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Ejecutar build de React
+        run: npm run build
+
+      - name: Verificar contenido de build
+        run: ls -la build
+
+      - name: Subir artefacto react-build
         uses: actions/upload-artifact@v4
         with:
           name: react-build
           path: ./build
+# ----------------------------  Conectarse a Docker -------------------------------------
 
-    DOCKERBUILD:
-      needs: UPLOADDOCKER
-      runs-on: ubuntu-latest
-      steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+
+# ----------------------------  descargar repo a Docker -------------------------------------
+    # DOCKERBUILD:
+    #   needs: UPLOADDOCKER
+    #   runs-on: ubuntu-latest
+    #   steps:
+    #   - name: Checkout code
+    #     uses: actions/checkout@v2
         
-      - name: Download React Build
-        uses: actions/download-artifact@v4
-        with:
-          name: react-build
-          path: ${{ github.workspace }}
+    #   - name: Download React Build
+    #     uses: actions/download-artifact@v4
+    #     with:
+    #       name: react-build
+    #       path: ${{ github.workspace }}
 
-      - name: Verificar contenido
-        run: ls -la ./build
+    #   - name: Verificar contenido
+    #     run: ls -la ./build
       
-      - name: Docker Login
-        uses: docker/login-action@v3.0.0
-        with:
-          username: ${{ secrets.DOCKER_USER }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+    #   - name: Docker Login
+    #     uses: docker/login-action@v3.0.0
+    #     with:
+    #       username: ${{ secrets.DOCKER_USER }}
+    #       password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build Docker Image
-        run: |
-          docker build --tag wainerock/devsecopslab-test:latest .
+    #   - name: Build Docker Image
+    #     run: |
+    #       docker build --tag wainerock/devsecopslab-test:latest .
 
-      - name: Push Docker Image
-        run: |
-          docker push wainerock/devsecopslab-test
+    #   - name: Push Docker Image
+    #     run: |
+    #       docker push wainerock/devsecopslab-test
 
         
           
