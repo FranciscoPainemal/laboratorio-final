@@ -118,39 +118,39 @@ jobs:
       #     path: ./build
 
 # ----------------------------  Subir repo a Docker -------------------------------------
-    # UPLOADDOCKER:
-    #   needs: SCA
-    #   # runs-on: ubuntu-latest
-    #   # steps:
-    #   # - uses: actions/checkout@v2
-    #   # - uses: actions/setup-node@v4
-    #   #   with:
-    #   #     node-version: 18
-    #   # - run: npm ci
-    #   # - run: npm run build
-    #   # - name: Upload React Build
-    #   #   uses: actions/upload-artifact@v4
-    #   #   with:
-    #   #     name: react-build
-    #   #     path: ./build
-    #   runs-on: ubuntu-latest
-    #   steps:
-    #   - name: Checkout código
-    #     uses: actions/checkout@v3
+    UPLOADDOCKER:
+      needs: SCA
+      # runs-on: ubuntu-latest
+      # steps:
+      # - uses: actions/checkout@v2
+      # - uses: actions/setup-node@v4
+      #   with:
+      #     node-version: 18
+      # - run: npm ci
+      # - run: npm run build
+      # - name: Upload React Build
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: react-build
+      #     path: ./build
+      runs-on: ubuntu-latest
+      steps:
+      - name: Checkout código
+        uses: actions/checkout@v3
 
-    #   - name: Setup Node.js
-    #     uses: actions/setup-node@v4
-    #     with:
-    #       node-version: 18
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
 
-    #   - name: Instalar dependencias
-    #     run: npm ci
+      - name: Instalar dependencias
+        run: npm ci
 
-    #   - name: Verificar que next esté disponible
-    #     run: npx next --version
+      - name: Verificar que next esté disponible
+        run: npx next --version
 
-    #   - name: Build de Next.js
-    #     run: npm run build
+      - name: Build de Next.js
+        run: npm run build
 # ----------------------------  Conectarse a Docker -------------------------------------
 
 
