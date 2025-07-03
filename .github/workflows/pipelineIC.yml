@@ -245,9 +245,9 @@ jobs:
         uses: zaproxy/action-baseline@v0.11.0
         with:
           target: 'http://localhost:3000/'
-          fail_action: false
-          rules_file_name: ''
-          cmd_options: '-config replacer.full_list(0).enabled=false'
+          # fail_action: false
+          # rules_file_name: ''
+          # cmd_options: '-config replacer.full_list(0).enabled=false'
 
       - name: Eliminar contenedor de aplicación (cleanup)
         if: always()
