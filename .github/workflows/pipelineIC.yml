@@ -211,7 +211,7 @@ jobs:
       #     Set-ExecutionPolicy Bypass -Scope Process -Force
 
       - name: Despliegue App
-        shell: bash
+        shell: pwsh
         run: |
           docker run -p 3000:3000 --name laboratorio-final-deploy -d wainerock/devsecopslab-test:latest
 
