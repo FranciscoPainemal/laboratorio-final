@@ -227,42 +227,19 @@ jobs:
       - name: Eliminar contenedor previo si existe
         shell: powershell
         run: |
-          Write-Host "⏳ Intentando eliminar contenedor existente (si hay)..."
+          Write-Host "Intentando eliminar contenedor existente (si hay)..."
           try {
             docker rm -f laboratorio-final-deploy | Out-Null
-            Write-Host "✅ Contenedor eliminado"
+            Write-Host "Contenedor eliminado"
           } catch {
-            Write-Host "ℹ️ No se eliminó ningún contenedor (posiblemente no existe)"
+            Write-Host "No se eliminó ningún contenedor (posiblemente no existe)"
           }
 
       - name: Desplegar contenedor de aplicación
         shell: powershell
         run: |
-          Write-Host "🚀 Iniciando contenedor..."
+          Write-Host " Iniciando contenedor..."
           docker run -p 3000:3000 --name laboratorio-final-deploy -d wainerock/devsecopslab-test:latest
-
-      # - name: Esperar disponibilidad de la aplicación
-      #   shell: powershell
-      #   run: |
-      #     $retries = 5
-      #     $success = $false
-      #     Write-Host "⏳ Esperando a que la app responda en http://localhost:3000"
-      #     Start-Sleep -Seconds 10
-      #     for ($i = 1; $i -le $retries; $i++) {
-      #       try {
-      #         $response = Invoke-WebRequest -Uri "http://localhost:3000" -UseBasicParsing -TimeoutSec 5
-      #         Write-Host "✅ Aplicación disponible (status $($response.StatusCode))"
-      #         $success = $true
-      #         break
-      #       } catch {
-      #         Write-Host "❌ Intento $i fallido... esperando 5 segundos"
-      #         Start-Sleep -Seconds 5
-      #       }
-      #     }
-      #     if (-not $success) {
-      #       Write-Error "⛔ La aplicación no respondió dentro del tiempo esperado"
-      #       exit 1
-      #     }
 
       - name: Escanear con OWASP ZAP (DAST)
         uses: zaproxy/action-baseline@v0.11.0
@@ -276,5 +253,5 @@ jobs:
         if: always()
         shell: powershell
         run: |
-          Write-Host "🧼 Eliminando contenedor laboratorio-final-deploy..."
+          Write-Host "Eliminando contenedor laboratorio-final-deploy..."
           docker rm -f laboratorio-final-deploy | Out-Null
