@@ -224,6 +224,11 @@ jobs:
       #   uses: zaproxy/action-baseline@v0.11.0
       #   with:
       #     target: 'http://localhost:3000/' 
+      - name: Eliminar contenedor previo si existe
+        shell: powershell
+        run: |
+          Write-Host "⏳ Intentando eliminar contenedor existente (si hay)..."
+          docker rm -f laboratorio-final-deploy -ErrorAction SilentlyContinue
 
       - name: Desplegar contenedor de aplicación
         shell: powershell
@@ -262,4 +267,9 @@ jobs:
           rules_file_name: ''
           cmd_options: '-config replacer.full_list(0).enabled=false'
 
-
+      - name: Eliminar contenedor de aplicación (cleanup)
+        if: always()
+        shell: powershell
+        run: |
+          Write-Host "🧼 Eliminando contenedor laboratorio-final-deploy..."
+          docker rm -f laboratorio-final-deploy | Out-Null
