@@ -228,7 +228,12 @@ jobs:
         shell: powershell
         run: |
           Write-Host "⏳ Intentando eliminar contenedor existente (si hay)..."
-          docker rm -f laboratorio-final-deploy -ErrorAction SilentlyContinue
+          try {
+            docker rm -f laboratorio-final-deploy | Out-Null
+            Write-Host "✅ Contenedor eliminado"
+          } catch {
+            Write-Host "ℹ️ No se eliminó ningún contenedor (posiblemente no existe)"
+          }
 
       - name: Desplegar contenedor de aplicación
         shell: powershell
