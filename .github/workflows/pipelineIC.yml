@@ -226,13 +226,13 @@ jobs:
       #     target: 'http://localhost:3000/' 
 
       - name: Desplegar contenedor de aplicación
-        shell: pwsh
+        shell: powershell
         run: |
           Write-Host "🚀 Iniciando contenedor..."
           docker run -p 3000:3000 --name laboratorio-final-deploy -d wainerock/devsecopslab-test:latest
 
       - name: Esperar disponibilidad de la aplicación
-        shell: pwsh
+        shell: powershell
         run: |
           $retries = 5
           $success = $false
