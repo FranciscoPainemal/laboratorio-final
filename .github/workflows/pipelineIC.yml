@@ -138,17 +138,19 @@ jobs:
       - name: Checkout código
         uses: actions/checkout@v3
 
-      - name: Ejecutar build de Next.js
-        run: npm run build
-
-      - name: Subir artefacto Next.js
-        uses: actions/upload-artifact@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          name: next-build
-          path: |
-            .next
-            package.json
-            public
+          node-version: 18
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Verificar que next esté disponible
+        run: npx next --version
+
+      - name: Build de Next.js
+        run: npm run build
 # ----------------------------  Conectarse a Docker -------------------------------------
 
 
