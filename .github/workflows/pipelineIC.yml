@@ -142,10 +142,6 @@ jobs:
             public
             package.json
 
-
-# ----------------------------  Conectarse a Docker -------------------------------------
-
-
 # ----------------------------  descargar repo a Docker -------------------------------------
     DOCKERBUILD:
       needs: UPLOADDOCKER
@@ -170,12 +166,37 @@ jobs:
         run: |
           docker build --tag wainerock/devsecopslab-test:latest .
 
-      - name: Push Docker Image
+      # - name: Push Docker Image
+      #   run: |
+      #     docker push wainerock/devsecopslab-test
+
+# ----------------------------  Escanear a Docker -------------------------------------
+    SCANDOCKER:
+      needs: DOCKERBUILD
+      runs-on: ubuntu-latest
+      steps:
+
+      - name: Docker Login
+        uses: docker/login-action@v3.0.0
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Docker Pull
+        run: |
+          docker pull wainerock/devsecopslab-test:latest
+      
+      - name: Análisis con Trivy
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: wainerock/devsecopslab-test:latest
+          format: table
+          exit-code: '1'
+          severity: 'CRITICAL, HIGH, MEDIUM'
+      
+      - name: Push docker
         run: |
           docker push wainerock/devsecopslab-test
-
-        
-          
 
 
  
