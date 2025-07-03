@@ -200,6 +200,22 @@ jobs:
 
 # ----------------------------  Escanear a DAST -------------------------------------
  
-    # DAST:
-    #   needs: SCANDOCKER
-    #   runs-on: self-hosted
+    DAST:
+      needs: SCANDOCKER
+      runs-on: self-hosted
+      steps:
+
+      - name: Despliegue App
+        run: |
+          docker run -p 3000:3000 --name laboratorio-final-deploy -d wainerock/devsecopslab-test:latest
+
+      - name: Esperando...
+        run: |
+          sleep 30
+      
+      - name: Escanear con OWASP ZAP Scan
+        uses: zaproxy/action-baseline@v0.11.0
+        with:
+          target: 'http://localhost:3000/' 
+
+
