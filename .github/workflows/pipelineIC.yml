@@ -204,6 +204,11 @@ jobs:
       needs: SCANDOCKER
       runs-on: self-hosted
       steps:
+      
+      - name: Permitir ejecución de scripts
+        shell: pwsh
+        run: |
+          Set-ExecutionPolicy Bypass -Scope Process -Force
 
       - name: Despliegue App
         run: |
@@ -211,7 +216,7 @@ jobs:
 
       - name: Esperando...
         run: |
-          sleep 30
+          sleep 10
       
       - name: Escanear con OWASP ZAP Scan
         uses: zaproxy/action-baseline@v0.11.0
