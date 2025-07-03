@@ -205,12 +205,13 @@ jobs:
       runs-on: self-hosted
       steps:
       
-      - name: Permitir ejecución de scripts
-        shell: pwsh
-        run: |
-          Set-ExecutionPolicy Bypass -Scope Process -Force
+      # - name: Permitir ejecución de scripts
+      #   shell: bash
+      #   run: |
+      #     Set-ExecutionPolicy Bypass -Scope Process -Force
 
       - name: Despliegue App
+        shell: bash
         run: |
           docker run -p 3000:3000 --name laboratorio-final-deploy -d wainerock/devsecopslab-test:latest
 
