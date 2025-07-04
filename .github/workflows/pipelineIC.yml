@@ -280,7 +280,7 @@ jobs:
       - name: Ejecutar ZAP Baseline Scan con Docker
         run: |
           docker run --network host \
-            -v "${{ github.workspace }}:/zap/wrk/:rw"
+            -v ${{ github.workspace }}:/zap/wrk/:rw \
             ghcr.io/zaproxy/zaproxy:stable zap-baseline.py \
             -t http://localhost:3000 \
             -r zap-report.html \
