@@ -289,7 +289,22 @@ jobs:
             -t http://localhost:3000 \
             -r zap-report.html \
             -I
+      - name: Validar resultados ZAP (falla si WARN-NEW > 0)
+        run: |
+          echo "📋 Revisando zap-output.log..."
+          cat zap-output.log
 
+          # Extrae el número de WARN-NEW
+          WARN_NEW=$(grep 'WARN-NEW:' zap-output.log | awk '{print $3}')
+          echo "WARN-NEW detectados: $WARN_NEW"
+
+          if [ "$WARN_NEW" -gt 0 ]; 
+          then
+            echo "Pipeline fallado por presencia de WARN-NEW"
+            exit 1
+          else
+            echo "No se encontraron advertencias nuevas (WARN-NEW = 0)"
+          fi
       - name: Eliminar contenedor de aplicación
         if: always()
         run: docker rm -f laboratorio-final-deploy || true
