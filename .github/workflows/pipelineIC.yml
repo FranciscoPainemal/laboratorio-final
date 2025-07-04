@@ -166,10 +166,6 @@ jobs:
         run: |
           docker build --tag wainerock/devsecopslab-test:latest .
 
-      # - name: Push Docker Image
-      #   run: |
-      #     docker push wainerock/devsecopslab-test
-
 # ----------------------------  Escanear a Docker -------------------------------------
     SCANDOCKER:
       needs: DOCKERBUILD
@@ -293,6 +289,8 @@ jobs:
         run: |
           echo "📋 Revisando zap-output.log..."
           cat zap-output.log
+          | tee "${{ github.workspace }}/zap-output.log"
+
 
           # Extrae el número de WARN-NEW
           WARN_NEW=$(grep 'WARN-NEW:' zap-output.log | awk '{print $3}')
