@@ -298,7 +298,7 @@ jobs:
 
           if [ "$WARN_NEW" -gt 0 ]; 
           then
-            echo "Pipeline fallado por presencia de WARN-NEW"
+            echo "Pipeline fallado por presencia de WARN-NEW."
             exit 1
           else
             echo "No se encontraron advertencias nuevas (WARN-NEW = 0)"
