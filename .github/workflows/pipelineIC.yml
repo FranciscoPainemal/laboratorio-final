@@ -61,3 +61,40 @@ jobs:
             fi
             set -e 
 
+        - name: Validando el tipo de proyecto
+          run: | 
+            if [ -f "package.json" ]; 
+            then    
+                if grep -q '"react"' package.json 
+                then
+                    echo "Proyecto es React."
+                else   
+                    echo "El proyecto no es del tipp React."
+                    exit 1
+                fi
+            else 
+                echo "No se encontró archivo."
+                exit 1
+            fi
+        - name: Ejecutando SonarCloud
+          run: |
+            npx sonar-scanner \
+              -Dsonar.projectKey=${{ github.event.repository.name }} \
+              -Dsonar.organization=franciscopainemal \
+              -Dsonar.host.url=https://sonarcloud.io \
+              -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+              -Dsonar.branch.name=main
+
+        - name: Validando resultados de SonarQube
+          run: |
+            issuesCritical=$(curl -s -X GET -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/issues/search?branch=main&componentKeys=${{ github.event.repository.name }}&facets=severities' | jq '.facets[0].values[2].count')
+            issuesMayor=$(curl -s -X GET -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/issues/search?branch=main&componentKeys=${{ github.event.repository.name }}&facets=severities' | jq '.facets[0].values[1].count')
+            issuesMinor=$(curl -s -X GET -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/issues/search?branch=main&componentKeys=${{ github.event.repository.name }}&facets=severities' | jq '.facets[0].values[0].count')
+                                        
+            if [ "$issuesCritical" -gt 0 ] || [ "$issuesMayor" -gt 0 ] || [ "$issuesMinor" -gt 0 ];
+            then
+              echo "Existen infracciones de niveles Criticos, Mayores y/o Medios en el código, se aborta Pipeline"
+              exit 1
+            else
+              echo "Continua Pipeline"
+            fi
