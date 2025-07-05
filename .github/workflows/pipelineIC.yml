@@ -154,7 +154,7 @@ jobs:
               # exit 1
             fi
 
-# CONSTRUCCIÓN DE IMAGEN, quiebre de pipeline. 
+# CONSTRUCCIÓN DE IMAGEN 
   DOCKERBUILD:
       needs: SCA
       runs-on: ubuntu-latest
@@ -177,3 +177,33 @@ jobs:
         - name: Build Imagen Docker
           run: |
             docker build --tag wainerock/devsecopslab-test:latest .
+
+# ESCANEO DE IMAGEN, quiebre de pipeline. 
+  SCANIMAGEN:
+      needs: DOCKERBUILD
+      runs-on: ubuntu-latest
+      steps:        
+        - name: Docker Login
+          uses: docker/login-action@v3.0.0
+          with:
+            username: ${{ secrets.DOCKER_USER }}
+            password: ${{ secrets.DOCKER_PASSWORD }}
+
+        - name: Pull Imagen Docker
+          run: |
+            docker pull wainerock/devsecopslab-test:latest
+
+        - name: Análisis de Imagen con Trivy
+          uses: aquasecurity/trivy-action@0.28.0
+          with:
+            image-ref: wainerock/devsecopslab-test:latest
+            format: table
+            exit-code: 1
+            severity: 'CRITICAL,HIGH,MEDIUM'
+
+        - name: Push Docker
+          run: |
+            docker push wainerock/devsecopslab-test:latest
+
+
+    
