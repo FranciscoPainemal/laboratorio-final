@@ -205,5 +205,19 @@ jobs:
           run: |
             docker push wainerock/devsecopslab-test:latest
 
+# DAST, quiebre de pipeline. 
+  DAST:
+      needs: SCANIMAGEN
+      runs-on: self-hosted
+      steps:
+        - name: Eliminar contenedor previo si existe
+          run: |
+            echo "Eliminando contenedor previo si existe..."
+            docker rm -f laboratorio-final-deploy || true
 
+        - name: Desplegar contenedor de aplicación
+          run: |
+            echo "Iniciando contenedor..."
+            shell: powershell
+            docker run -p 3000:3000 --name laboratorio-final-deploy -d wainerock/devsecopslab-test:latest   
     
