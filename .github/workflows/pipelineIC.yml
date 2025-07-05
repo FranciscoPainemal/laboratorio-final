@@ -148,14 +148,9 @@ jobs:
             MEDIUM=$(jq '[.dependencies[].vulnerabilities[]? | select(.severity == "moderate")] | length' "$REPORT")
             TOTAL=$(jq '[.dependencies[].vulnerabilities[]?] | length' "$REPORT")
 
-            echo "Vulnerabilidades encontradas críticas: $CRITICAL; altas: $HIGH; y medias: $MEDIUM; con tun total de: $TOTAL"
-            # echo "Críticas: $CRITICAL"
-            # echo "Altas: $HIGH"
-            # echo "Medias: $MEDIUM"
-            # echo "Bajas: $LOW"
-            # echo "Total: $TOTAL"
+            echo "Vulnerabilidades encontradas críticas: $CRITICAL; altas: $HIGH; y medias: $MEDIUM;"
             
-            if [ "CRITICAL" -gt 0 ] || [ "HIGH" -gt 0 ] ||  [ "MEDIUM" -gt 0 ];
+            if [ "$CRITICAL" -gt 0 ] || [ "$HIGH" -gt 0 ] ||  [ "$MEDIUM" -gt 0 ];
             then
               echo "Existen infracciones de niveles Criticos, Mayores y/o Medios en el código, se aborta Pipeline en el análisis SCA"
               exit 1
