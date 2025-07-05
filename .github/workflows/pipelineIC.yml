@@ -33,7 +33,7 @@ jobs:
                 public
                 package.json
 
-# ANÁLISIS SAST
+# ANÁLISIS SAST y quiebre de pipeline
   SAST:
       needs: BUILD
       runs-on: ubuntu-latest
@@ -99,7 +99,7 @@ jobs:
               # exit 1
             fi
 
-# ANÁLISIS SCA, craeción de reporte y quiebre de pipeline 
+# ANÁLISIS SCA, creación de reporte y quiebre de pipeline 
   SCA:
       needs: SAST
       runs-on: ubuntu-latest
@@ -125,10 +125,35 @@ jobs:
             args: >
               --failOnCVSS 7
               --enableRetired
+
         - name: Generar reporte de SCA como un repositorio
           uses: actions/upload-artifact@v4
           with:
               name: dependency-check-reports
               path: ${{ github.workspace }}/reports
 
+        - name: Mostrar resumen de vulnerabilidades
+          if: always()
+          run: |
+            echo "Analizando reporte JSON..."
+            REPORT="reports/dependency-check-report.json"
 
+            if [ ! -f "$REPORT" ]; 
+            
+            then
+              echo "No se encontró el reporte JSON en $REPORT"
+              exit 1
+            fi
+
+            CRITICAL=$(jq '[.dependencies[].vulnerabilities[]? | select(.severity == "Critical")] | length' "$REPORT")
+            HIGH=$(jq '[.dependencies[].vulnerabilities[]? | select(.severity == "High")] | length' "$REPORT")
+            MEDIUM=$(jq '[.dependencies[].vulnerabilities[]? | select(.severity == "Medium")] | length' "$REPORT")
+            LOW=$(jq '[.dependencies[].vulnerabilities[]? | select(.severity == "Low")] | length' "$REPORT")
+            TOTAL=$(jq '[.dependencies[].vulnerabilities[]?] | length' "$REPORT")
+
+            echo "🛡️  Vulnerabilidades encontradas:"
+            echo "  🔥 Críticas: $CRITICAL"
+            echo "  ⚠️  Altas: $HIGH"
+            echo "  ⚠️  Medias: $MEDIUM"
+            echo "  ⚙️  Bajas: $LOW"
+            echo "  📦 Total: $TOTAL"
