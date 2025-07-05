@@ -210,10 +210,10 @@ jobs:
       needs: SCANIMAGEN
       runs-on: self-hosted
       steps:
-        - name: Eliminar contenedor previo si existe
-          run: |
-            echo "Eliminando contenedor previo si existe..."
-            docker rm -f laboratorio-final-deploy || true
+        # - name: Eliminar contenedor previo si existe
+        #   run: |
+        #     echo "Eliminando contenedor previo si existe..."
+        #     docker rm -f laboratorio-final-deploy || true
 
         - name: Desplegar contenedor de aplicación
           run: |
