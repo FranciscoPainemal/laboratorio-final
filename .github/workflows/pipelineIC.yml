@@ -19,7 +19,7 @@ jobs:
               node-version: 18
 
         - name: Instalando dependencias
-          run: npm run ci 
+          run: npm ci 
         
         - name: Build del reposirotio
           run: npm run build
