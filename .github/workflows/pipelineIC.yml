@@ -153,8 +153,8 @@ jobs:
               echo "Existen infracciones de niveles Críticas, Altas y/o Medias en el código, se aborta Pipeline en el análisis SCA"
               # exit 1
             fi
-            
-# CONSTRUCCIÓN DE IMAGEN, quiebre de pipeline 
+
+# CONSTRUCCIÓN DE IMAGEN, quiebre de pipeline. 
   DOCKERBUILD:
       needs: SCA
       runs-on: ubuntu-latest
