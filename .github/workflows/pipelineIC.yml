@@ -138,16 +138,14 @@ jobs:
             REPORT="reports/dependency-check-report.json"
 
             if [ ! -f "$REPORT" ]; 
-
             then
               echo "No se encontró el reporte JSON en $REPORT"
               exit 1
             fi
 
-            CRITICAL=$(jq '[.dependencies[].vulnerabilities[]? | select(.severity == "Critical")] | length' "$REPORT")
-            HIGH=$(jq '[.dependencies[].vulnerabilities[]? | select(.severity == "High")] | length' "$REPORT")
-            MEDIUM=$(jq '[.dependencies[].vulnerabilities[]? | select(.severity == "Medium")] | length' "$REPORT")
-            LOW=$(jq '[.dependencies[].vulnerabilities[]? | select(.severity == "Low")] | length' "$REPORT")
+            CRITICAL=$(jq '[.dependencies[].vulnerabilities[]? | select(.severity == "critical")] | length' "$REPORT")
+            HIGH=$(jq '[.dependencies[].vulnerabilities[]? | select(.severity == "high")] | length' "$REPORT")
+            MEDIUM=$(jq '[.dependencies[].vulnerabilities[]? | select(.severity == "moderate")] | length' "$REPORT")
             TOTAL=$(jq '[.dependencies[].vulnerabilities[]?] | length' "$REPORT")
 
             echo "Vulnerabilidades encontradas:"
