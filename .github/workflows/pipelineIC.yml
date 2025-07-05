@@ -10,7 +10,7 @@ jobs:
   BUILD: 
       runs-on: ubuntu-latest
       steps:
-        - name: namCheckOut Code
+        - name: CheckOut Code
           uses: actions/checkout@v2
 
         - name: Versión de a utilizar Node.js 18 
