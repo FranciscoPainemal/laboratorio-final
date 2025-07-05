@@ -28,7 +28,10 @@ jobs:
           uses: actions/upload-artifact@master
           with:
               name: build-artifact
-              path: ${{ github.workspace }}/.next
+              path: |
+                .next
+                public
+                package.json
 
 # ANÁLISIS SAST CON ARTEFACTO EN GITHUB
   SAST:
@@ -42,7 +45,7 @@ jobs:
           uses: actions/download-artifact@master
           with:
               name: build-artifact
-              path: ${{ github.workspace }}/.next
+              path: .
 
         # - name: Validando existencia del proyecto en SonarQube
         #   run: |
