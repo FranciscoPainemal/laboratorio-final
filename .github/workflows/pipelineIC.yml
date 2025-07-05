@@ -136,10 +136,10 @@ jobs:
           if: always()
           run: |
             echo "Analizando reporte JSON..."
-            REPORT="reports/dependency-check-report.json"
+            REPORT="reports/dependency-check-reports.json"
 
             if [ ! -f "$REPORT" ]; 
-            
+
             then
               echo "No se encontró el reporte JSON en $REPORT"
               exit 1
@@ -151,9 +151,9 @@ jobs:
             LOW=$(jq '[.dependencies[].vulnerabilities[]? | select(.severity == "Low")] | length' "$REPORT")
             TOTAL=$(jq '[.dependencies[].vulnerabilities[]?] | length' "$REPORT")
 
-            echo "🛡️  Vulnerabilidades encontradas:"
-            echo "  🔥 Críticas: $CRITICAL"
-            echo "  ⚠️  Altas: $HIGH"
-            echo "  ⚠️  Medias: $MEDIUM"
-            echo "  ⚙️  Bajas: $LOW"
-            echo "  📦 Total: $TOTAL"
+            echo "Vulnerabilidades encontradas:"
+            echo "Críticas: $CRITICAL"
+            echo "Altas: $HIGH"
+            echo "Medias: $MEDIUM"
+            echo "Bajas: $LOW"
+            echo "Total: $TOTAL"
