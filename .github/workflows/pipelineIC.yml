@@ -6,7 +6,7 @@ on:
 
 jobs:
 
-# CONTRUCCIÓN BUILD RECURSIVOY Y CRACIÓN COMO ARTEFACTO EN GITHUB
+# CONTRUCCIÓN BUILD RECURSIVO Y CRACIÓN COMO ARTEFACTO EN GITHUB
   BUILD: 
       runs-on: ubuntu-latest
       steps:
@@ -24,9 +24,37 @@ jobs:
         - name: Build del reposirotio
           run: npm run build
 
-        - name: Subir build como artefacto
+        - name: Subir build como artefacto para reutilización
           uses: actions/upload-artifact@v4
           with:
               name: build-artifact
               path: ${{ github.workspace }}/.next
+
+# ANÁLISIS SAST CON ARTEFACTO EN GITHUB
+  SAST:
+      needs: BUILD
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+        
+        - name: Descargar Artefacto Build
+          uses: actions/download-artifact@v4
+          with:
+              name: build-artifact
+              path: ${{ github.workspace }}/.next
+
+        - name: Validando existencia del proyecto en SonarQube
+          run: |
+            set +e
+            curl -f -X POST -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/projects/create' -d 'name=${{github.event.repository.name}}' -d 'project=${{github.event.repository.name}}' -d 'organization=franciscopainemal' -d 'visibility=public'
+            if [ $? -ne 0 ]; then
+                echo "el proyecto ya existe en SonarCloud"
+                echo ":: set-output name=proyectoExiste::1"
+            else
+                echo "Proyecto ${{github.event.repository.name}} creado exitosamente con SonarCloud"
+                echo "Se establece rama Main como rama por defecto"
+                curl -f -X POST -u '${{ secrets.SONAR_TOKEN }}:' 'https://sonarcloud.io/api/project_branches/rename' -d 'name=main' -d 'project=${{ github.event.repository.name }}'                
+            fi
+            set -e 
 
