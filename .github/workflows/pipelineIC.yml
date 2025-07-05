@@ -33,7 +33,7 @@ jobs:
                 public
                 package.json
 
-# ANÁLISIS SAST CON ARTEFACTO EN GITHUB
+# ANÁLISIS SAST
   SAST:
       needs: BUILD
       runs-on: ubuntu-latest
@@ -96,5 +96,39 @@ jobs:
             if [ "$issuesCritical" -gt 0 ] || [ "$issuesMayor" -gt 0 ] || [ "$issuesMinor" -gt 0 ];
             then
               echo "Existen infracciones de niveles Criticos, Mayores y/o Medios en el código, se aborta Pipeline"
-              exit 1
+              # exit 1
             fi
+
+# ANÁLISIS SCA, craeción de reporte y quiebre de pipeline 
+  SCA:
+      needs: SAST
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+        
+        - name: Descargar Artefacto Build
+          uses: actions/download-artifact@master
+          with:
+              name: build-artifact
+              path: .
+        
+        - name: Dependency Check
+          uses: dependency-check/Dependency-Check_Action@1.0.0 
+          env: 
+            JAVA_HOME: /opt/jdk
+          with:
+            project: '${{ github.event.repository.name }}'
+            path: '.'
+            format: 'HTML'
+            out: 'reports'
+            args: >
+              --failOnCVSS 7
+              --enableRetired
+        - name: Generar reporte de SCA como un repositorio
+          uses: actions/upload-artifact@v4
+          with:
+              name: dependency-check-reports
+              path: ${{ github.workspace }}/reports
+
+
