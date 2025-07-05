@@ -120,7 +120,7 @@ jobs:
           with:
             project: '${{ github.event.repository.name }}'
             path: '.'
-            format: 'HTML, JSON'
+            format: 'ALL'
             out: 'reports'
             args: >
               --failOnCVSS 7
