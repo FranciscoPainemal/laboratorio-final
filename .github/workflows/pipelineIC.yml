@@ -242,6 +242,8 @@ jobs:
       #     fail_action: 'false'
       #     cmd_options: '-config replacer.full_list(0).enabled=false'
 
+      - name: Crear directorio de trabajo para ZAP
+        run: mkdir -p ${{ github.workspace }}
 
 
       - name: Escaneo OWASP ZAP Scan
@@ -250,7 +252,7 @@ jobs:
           -v ${{ github.workspace }}:/zap/wrk/:rw \
           ghcr.io/zaproxy/zaproxy:stable zap-baseline.py \
           -t http://localhost:3000 \
-          -J report_json.json -w report_md.md -r report_html.html \
+          -r zap-report.html \
           -I
 
 
