@@ -247,7 +247,7 @@ jobs:
           docker run --network host \
           -v ${{ github.workspace }}:/zap/wrk/:rw \
           ghcr.io/zaproxy/zaproxy:stable zap-baseline.py \
-          -t http://reddit-clone-yt:3000 \
+          -t http://laboratorio-final-deploy:3000 \
           -r zap-report.html \
           -I
 
