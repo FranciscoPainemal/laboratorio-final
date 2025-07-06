@@ -235,25 +235,22 @@ jobs:
             echo "Iniciando contenedor..."
             docker run -p 3000:3000 --name laboratorio-final-deploy -d wainerock/devsecopslab-test:latest   
 
-      - name: Análisis OWASP ZAP Scan
-        uses: zaproxy/action-baseline@v0.11.0
-        with:
-          target: 'http://localhost:3000'
-          fail_action: 'false'
-          # cmd_options: '-config replacer.full_list(0).enabled=false'
-          token: $
-          issue_title: Security Tests
-          #cmd_options: '-daemon -host 0.0.0.0 -port 8080 -config api.disablekey=true'
+      # - name: Análisis OWASP ZAP Scan
+      #   uses: zaproxy/action-baseline@v0.11.0
+      #   with:
+      #     target: 'http://localhost:3000'
+      #     fail_action: 'false'
+      #     cmd_options: '-config replacer.full_list(0).enabled=false'
 
 
 
-      # - name: Escaneo OWASP ZAP Scan
-      #   run: |
-      #     docker run --network host \
-      #     -v ${{ github.workspace }}:/zap/wrk/:rw \
-      #     ghcr.io/zaproxy/zaproxy:stable zap-baseline.py \
-      #     -t http://localhost:3000 \
-      #     -r zap-report.html \
-      #     -I
+      - name: Escaneo OWASP ZAP Scan
+        run: |
+          docker run --network host \
+          -v ${{ github.workspace }}:/zap/wrk/:rw \
+          ghcr.io/zaproxy/zaproxy:stable zap-baseline.py \
+          -t http://localhost:3000 \
+          -J report_json.json -w report_md.md -r report_html.html \
+          -I
 
 
