@@ -258,32 +258,32 @@ jobs:
         shell: bash
         run: |
           if ! docker network ls --format '{{.Name}}' | grep -q '^zap-net$'; then
-            echo "🔧 Red zap-net no existe. Creándola..."
+            echo "Red zap-net no existe. Creándola..."
             docker network create zap-net
           else
-            echo "✅ Red zap-net ya existe"
+            echo "Red zap-net ya existe"
           fi
 
       - name: Eliminar contenedor previo si existe
         shell: bash
         run: |
-          echo "🧹 Eliminando contenedor previo si existe..."
+          echo "Eliminando contenedor previo si existe..."
           docker rm -f laboratorio-final-deploy 2>/dev/null || true
 
       - name: Desplegar contenedor de aplicación
         shell: bash
         run: |
-          echo "🚀 Iniciando contenedor laboratorio-final-deploy..."
+          echo "Iniciando contenedor laboratorio-final-deploy..."
           docker run -d \
             --network zap-net \
             --name laboratorio-final-deploy \
             -p 3000:3000 \
             wainerock/devsecopslab-test:latest
 
-          echo "⏳ Esperando que la app esté disponible en localhost:3000..."
+          echo "Esperando que la app esté disponible en localhost:3000..."
           for i in {1..30}; do
             if curl -s http://localhost:3000/ > /dev/null; then
-              echo "✅ Aplicación disponible"
+              echo "Aplicación disponible"
               break
             fi
             sleep 2
@@ -304,5 +304,5 @@ jobs:
         if: always()
         shell: bash
         run: |
-          echo "🧹 Eliminando contenedor laboratorio-final-deploy..."
+          echo "Eliminando contenedor laboratorio-final-deploy.."
           docker rm -f laboratorio-final-deploy 2>/dev/null || true          
