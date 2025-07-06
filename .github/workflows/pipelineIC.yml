@@ -213,9 +213,9 @@ jobs:
       - name: Eliminar contenedor previo si existe
         run: |
             echo "Eliminando contenedor previo si existe..."
-            docker rm -f laboratorio-final-deploy || true
+            docker rm -f laboratorio-final-deploy
 
-      - name: Desplegar contenedor de aplicación
+      - name: Desplegar Aplicación
         run: |
             echo "Iniciando contenedor..."
             docker run -p 3000:3000 --name laboratorio-final-deploy -d wainerock/devsecopslab-test:latest   
