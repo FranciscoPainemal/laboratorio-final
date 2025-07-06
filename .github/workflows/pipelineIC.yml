@@ -225,6 +225,12 @@ jobs:
       needs: DESPLIEGUE
       runs-on: self-hosted
       steps:
+
+      - name: Crear red Docker
+        run: |
+          docker network rm zap-net || true
+          docker network create zap-net
+
       - name: Eliminar contenedor previo si existe
         run: |
             echo "Eliminando contenedor previo si existe..."
@@ -241,10 +247,6 @@ jobs:
       #     target: 'http://localhost:3000'
       #     fail_action: 'false'
       #     cmd_options: '-config replacer.full_list(0).enabled=false'
-
-      - name: Crear directorio de trabajo para ZAP
-        run: mkdir -p ${{ github.workspace }}
-
 
       - name: Escaneo OWASP ZAP Scan
         run: |
