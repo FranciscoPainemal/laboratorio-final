@@ -240,8 +240,10 @@ jobs:
         with:
           target: 'http://localhost:3000'
           fail_action: 'false'
-          # cmd_options: '-config replacer.full_list(0).enabled=false' 
-          cmd_options: '-daemon -host 0.0.0.0 -port 8080 -config api.disablekey=true'
+          # cmd_options: '-config replacer.full_list(0).enabled=false'
+          token: $
+          issue_title: Security Tests
+          #cmd_options: '-daemon -host 0.0.0.0 -port 8080 -config api.disablekey=true'
 
 
 
