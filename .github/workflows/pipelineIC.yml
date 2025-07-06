@@ -221,9 +221,13 @@ jobs:
             docker run -p 3000:3000 --name laboratorio-final-deploy -d wainerock/devsecopslab-test:latest   
 
 # DAST, quiebre de pipeline. 
-  # DAST:
-  #     needs: DESPLIEGUE
-  #     runs-on: self-hosted
-  #     steps:
+  DAST:
+      needs: DESPLIEGUE
+      runs-on: self-hosted
+      steps:
+      - name: Análisis OWASP ZAP Scan
+        uses: zaproxy/action-baseline@v0.11.0
+        with:
+          target: 'http://localhost:3000' 
 
 
