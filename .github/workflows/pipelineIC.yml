@@ -238,6 +238,8 @@ jobs:
       - name: Análisis OWASP ZAP Scan
         uses: zaproxy/action-baseline@v0.11.0
         with:
-          target: 'http://localhost:3000' 
+          target: 'http://localhost:3000'
+          fail_action: false
+          cmd_options: '-config replacer.full_list(0).enabled=false' 
 
 
