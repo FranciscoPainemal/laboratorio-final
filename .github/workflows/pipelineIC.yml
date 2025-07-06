@@ -224,12 +224,7 @@ jobs:
   DAST:
       needs: DESPLIEGUE
       runs-on: self-hosted
-      steps:
-
-      # - name: Crear red Docker
-      #   run: |
-      #     docker network rm zap-net || true docker network create zap-net
-
+      steps:    
       - name: Eliminar contenedor previo si existe
         run: |
             echo "Eliminando contenedor previo si existe..."
@@ -250,7 +245,7 @@ jobs:
       - name: Escaneo OWASP ZAP Scan
         run: |
           docker run --network host \
-          -v $(pwd):/zap/wrk/:rw \
+          -v ${{ github.workspace }}:/zap/wrk/:rw \
           ghcr.io/zaproxy/zaproxy:stable zap-baseline.py \
           -t http://localhost:3000 \
           -r zap-report.html \
