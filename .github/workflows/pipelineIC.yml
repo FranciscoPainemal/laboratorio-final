@@ -213,6 +213,21 @@ jobs:
       - name: Eliminar contenedor previo si existe
         run: |
             echo "Eliminando contenedor previo si existe..."
+      #       docker rm -f laboratorio-final-deploy
+
+      # - name: Desplegar Aplicación
+      #   run: |
+      #       echo "Iniciando contenedor..."
+      #       docker run -p 3000:3000 --name laboratorio-final-deploy -d wainerock/devsecopslab-test:latest   
+
+# DAST, quiebre de pipeline. 
+  DAST:
+      needs: DESPLIEGUE
+      runs-on: self-hosted
+      steps:
+      - name: Eliminar contenedor previo si existe
+        run: |
+            echo "Eliminando contenedor previo si existe..."
             docker rm -f laboratorio-final-deploy
 
       - name: Desplegar Aplicación
@@ -220,11 +235,6 @@ jobs:
             echo "Iniciando contenedor..."
             docker run -p 3000:3000 --name laboratorio-final-deploy -d wainerock/devsecopslab-test:latest   
 
-# DAST, quiebre de pipeline. 
-  DAST:
-      needs: DESPLIEGUE
-      runs-on: self-hosted
-      steps:
       - name: Análisis OWASP ZAP Scan
         uses: zaproxy/action-baseline@v0.11.0
         with:
