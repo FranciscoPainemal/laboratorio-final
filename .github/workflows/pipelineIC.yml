@@ -243,3 +243,14 @@ jobs:
           cmd_options: '-config replacer.full_list(0).enabled=false' 
 
 
+
+      - name: Escaneo OWASP ZAP Scan
+        run: |
+          docker run --network host \
+          -v ${{ github.workspace }}:/zap/wrk/:rw \
+          ghcr.io/zaproxy/zaproxy:stable zap-baseline.py \
+          -t http://localhost:3000 \
+          -r zap-report.html \
+          -I
+
+
