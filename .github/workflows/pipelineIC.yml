@@ -210,8 +210,13 @@ jobs:
       needs: SCANIMAGEN
       runs-on: self-hosted
       steps:
-        - name: Desplegar contenedor de aplicación
-          run: |
+      - name: Eliminar contenedor previo si existe
+        run: |
+            echo "Eliminando contenedor previo si existe..."
+            docker rm -f laboratorio-final-deploy || true
+
+      - name: Desplegar contenedor de aplicación
+        run: |
             echo "Iniciando contenedor..."
             docker run -p 3000:3000 --name laboratorio-final-deploy -d wainerock/devsecopslab-test:latest   
 
@@ -220,13 +225,5 @@ jobs:
   #     needs: DESPLIEGUE
   #     runs-on: self-hosted
   #     steps:
-  #       # - name: Eliminar contenedor previo si existe
-  #       #   run: |
-  #       #     echo "Eliminando contenedor previo si existe..."
-  #       #     docker rm -f laboratorio-final-deploy || true
 
-  #       - name: Desplegar contenedor de aplicación
-  #         run: |
-  #           echo "Iniciando contenedor..."
-  #           docker run -p 3000:3000 --name laboratorio-final-deploy -d wainerock/devsecopslab-test:latest               
-    
+
