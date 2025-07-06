@@ -250,7 +250,7 @@ jobs:
       - name: Escaneo OWASP ZAP Scan
         run: |
           docker run --network host \
-          -v $(pwd)):/zap/wrk/:rw \
+          -v $(pwd):/zap/wrk/:rw \
           ghcr.io/zaproxy/zaproxy:stable zap-baseline.py \
           -t http://localhost:3000 \
           -r zap-report.html \
