@@ -218,6 +218,5 @@ jobs:
         - name: Desplegar contenedor de aplicación
           run: |
             echo "Iniciando contenedor..."
-            shell: powershell
             docker run -p 3000:3000 --name laboratorio-final-deploy -d wainerock/devsecopslab-test:latest   
     
