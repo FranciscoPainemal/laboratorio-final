@@ -233,8 +233,14 @@ jobs:
       - name: Desplegar Aplicación
         run: |
             echo "Iniciando contenedor..."
-            docker run -p 3000:3000 --name laboratorio-final-deploy -d wainerock/devsecopslab-test:latest   
-
+            # docker run -p 3000:3000 --name laboratorio-final-deploy -d wainerock/devsecopslab-test:latest
+            docker run -d \
+            --rm \
+            --network zap-net \
+            --name laboratorio-final-deploy \
+            -p 3000:3000 \   
+            wainerock/devsecopslab-test:latest
+            
       # - name: Análisis OWASP ZAP Scan
       #   uses: zaproxy/action-baseline@v0.11.0
       #   with:
@@ -244,10 +250,11 @@ jobs:
 
       - name: Escaneo OWASP ZAP Scan
         run: |
-          docker run --network host \
+          docker run --rm \
+          --network zap-net \
           -v ${{ github.workspace }}:/zap/wrk/:rw \
           ghcr.io/zaproxy/zaproxy:stable zap-baseline.py \
-          -t http://laboratorio-final-deploy:3000 \
-          -r zap-report.html \
+          -t http://localhost:3000/ \
+          -J report_json.json -w report_md.md -r report_html.html \
           -I
 
