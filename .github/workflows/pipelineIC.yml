@@ -234,12 +234,7 @@ jobs:
         run: |
             echo "Iniciando contenedor..."
             # docker run -p 3000:3000 --name laboratorio-final-deploy -d wainerock/devsecopslab-test:latest
-            docker run -d \
-            --rm \
-            --network zap-net \
-            --name laboratorio-final-deploy \
-            -p 3000:3000 \   
-            wainerock/devsecopslab-test:latest
+            docker run -d --rm --network zap-net --name laboratorio-final-deploy -p 3000:3000 wainerock/devsecopslab-test:latest
             
       # - name: Análisis OWASP ZAP Scan
       #   uses: zaproxy/action-baseline@v0.11.0
