@@ -226,9 +226,9 @@ jobs:
       runs-on: self-hosted
       steps:
 
-      - name: Crear red Docker
-        run: |
-          docker network rm zap-net || true docker network create zap-net
+      # - name: Crear red Docker
+      #   run: |
+      #     docker network rm zap-net || true docker network create zap-net
 
       - name: Eliminar contenedor previo si existe
         run: |
@@ -250,7 +250,7 @@ jobs:
       - name: Escaneo OWASP ZAP Scan
         run: |
           docker run --network host \
-          -v ${{ github.workspace }}:/zap/wrk/:rw \
+          -v $(pwd)):/zap/wrk/:rw \
           ghcr.io/zaproxy/zaproxy:stable zap-baseline.py \
           -t http://localhost:3000 \
           -r zap-report.html \
