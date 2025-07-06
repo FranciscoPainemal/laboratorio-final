@@ -228,8 +228,7 @@ jobs:
 
       - name: Crear red Docker
         run: |
-          docker network rm zap-net || true
-          docker network create zap-net
+          docker network rm zap-net || true docker network create zap-net
 
       - name: Eliminar contenedor previo si existe
         run: |
