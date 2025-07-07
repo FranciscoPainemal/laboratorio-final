@@ -206,19 +206,19 @@ jobs:
             docker push wainerock/devsecopslab-test:latest
 
 # DESPLIEGUE. 
-  # DESPLIEGUE:
-  #     needs: SCANIMAGEN
-  #     runs-on: self-hosted
-  #     steps:
-  #     - name: Eliminar contenedor previo si existe
-  #       run: |
-  #           echo "Eliminando contenedor previo si existe..."
-      #       docker rm -f laboratorio-final-deploy
+  DESPLIEGUE:
+      needs: SCANIMAGEN
+      runs-on: self-hosted
+      steps:
+      - name: Eliminar contenedor previo si existe
+        run: |
+            echo "Eliminando contenedor previo si existe..."
+            docker rm -f laboratorio-final-deploy
 
-      # - name: Desplegar Aplicación
-      #   run: |
-      #       echo "Iniciando contenedor..."
-      #       docker run -p 3000:3000 --name laboratorio-final-deploy -d wainerock/devsecopslab-test:latest   
+      - name: Desplegar Aplicación
+        run: |
+            echo "Iniciando contenedor..."
+            docker run -p 3000:3000 --name laboratorio-final-deploy -d wainerock/devsecopslab-test:latest   
 
 # DAST, quiebre de pipeline. 
   DAST:
@@ -241,7 +241,7 @@ jobs:
             -p 3000:3000 \
             wainerock/devsecopslab-test:latest
 
-            
+
       - name: Escanear con OWASP ZAP (DAST)
         uses: zaproxy/action-baseline@v0.11.0
         with:
