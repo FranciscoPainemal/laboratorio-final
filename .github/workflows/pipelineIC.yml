@@ -217,7 +217,7 @@ jobs:
 
       - name: Desplegar Aplicación
         run: |
-            echo "Iniciando contenedor..."
+            echo "Iniciando contenedor."
             docker run -p 3000:3000 --name laboratorio-final-deploy -d wainerock/devsecopslab-test:latest   
 
 # DAST, quiebre de pipeline. 
