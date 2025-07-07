@@ -204,6 +204,7 @@ jobs:
         - name: Push Docker
           run: |
             docker push wainerock/devsecopslab-test:latest
+            exit 1
 
 # DESPLIEGUE. 
   DESPLIEGUE:
@@ -212,7 +213,7 @@ jobs:
       steps:
       - name: Eliminar contenedor previo si existe
         run: |
-            echo "Eliminando contenedor previo si existe..."
+            echo "Eliminando contenedor previo si existe..."            
             docker rm -f laboratorio-final-deploy
 
       - name: Desplegar Aplicación
