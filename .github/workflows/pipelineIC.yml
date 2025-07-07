@@ -221,49 +221,52 @@ jobs:
       #       docker run -p 3000:3000 --name laboratorio-final-deploy -d wainerock/devsecopslab-test:latest   
 
 # DAST, quiebre de pipeline. 
-  # DAST:
-  #     needs: DESPLIEGUE
-  #     runs-on: self-hosted
-  #     steps:    
-  #     - name: Eliminar contenedor previo si existe
-  #       run: |
-  #           echo "Eliminando contenedor previo si existe..."
-  #           docker rm -f laboratorio-final-deploy
-
-  #     - name: Desplegar contenedor
-  #       shell: bash
-  #       run: |
-  #         echo "Iniciando contenedor..."
-  #         docker run \
-  #           --rm \
-  #           --network zap-net \
-  #           --name laboratorio-final-deploy \
-  #           -p 3000:3000 \
-  #           wainerock/devsecopslab-test:latest
-
-  #     - name: Escanear con OWASP ZAP (DAST)
-  #       shell: bash
-  #       uses: zaproxy/action-baseline@v0.11.0
-  #       with:
-  #         target: 'http://localhost:3000/'
-  #         fail_action: false
-  #         cmd_options: '-config replacer.full_list(0).enabled=false'
-  #         token: ${{ secrets.GITHUB_TOKEN }}
-  #         docker_name: ghcr.io/zaproxy/zaproxy:stable
   DAST:
-    needs: SCANIMAGEN
-    runs-on: self-hosted
-    steps:
-      - name: Verificar y crear red Docker zap-net si no existe
+      needs: DESPLIEGUE
+      runs-on: self-hosted
+      steps:    
+      - name: Eliminar contenedor previo si existe
+        run: |
+            echo "Eliminando contenedor previo si existe..."
+            docker rm -f laboratorio-final-deploy
+
+      - name: Desplegar contenedor
         shell: bash
         run: |
-          if [ ! docker network ls --format '{{.Name}}' | grep -q '^zap-net$' ]; 
-          then
-            echo "Red zap-net no existe. Creándola..."
-            docker network create zap-net
-          else
-            echo "Red zap-net ya existe"
-          fi
+          echo "Iniciando contenedor..."
+          docker run \
+            --rm \
+            --network zap-net \
+            --name laboratorio-final-deploy \
+            -p 3000:3000 \
+            wainerock/devsecopslab-test:latest
+
+            
+      - name: Escanear con OWASP ZAP (DAST)
+        uses: zaproxy/action-baseline@v0.11.0
+        with:
+          target: 'http://laboratorio-final-deploy:3000/'  # Dirección accesible dentro de zap-net
+          fail_action: false
+          cmd_options: '-config replacer.full_list(0).enabled=false'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          docker_name: ghcr.io/zaproxy/zaproxy:stable
+          allow_issue_writing: true
+          artifact_name: zap_scan
+
+  # DAST:
+  #   needs: SCANIMAGEN
+  #   runs-on: self-hosted
+  #   steps:
+  #     - name: Verificar y crear red Docker zap-net si no existe
+  #       shell: bash
+  #       run: |
+  #         if [ ! docker network ls --format '{{.Name}}' | grep -q '^zap-net$' ]; 
+  #         then
+  #           echo "Red zap-net no existe. Creándola..."
+  #           docker network create zap-net
+  #         else
+  #           echo "Red zap-net ya existe"
+  #         fi
 
       # - name: Eliminar contenedor previo si existe
       #   shell: bash
