@@ -204,7 +204,6 @@ jobs:
         - name: Push Docker
           run: |
             docker push wainerock/devsecopslab-test:latest
-            exit 1
 
 # DESPLIEGUE. 
   DESPLIEGUE:
